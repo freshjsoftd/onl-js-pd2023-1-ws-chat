@@ -1,10 +1,41 @@
-const http = require('http');
-const app = require('./app');
+const http = require("http");
+const app = require("./app");
+const { Server } = require("socket.io");
+const { Message } = require("./models");
+const { SOCKET_EVENTS } = require('../constant/constants')
 
 const PORT = 5000;
 
 const httpServer = http.createServer(app);
 
-httpServer.listen(PORT, () => {
-  console.log(`Server is running!`);
+const ioOptions = {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+};
+
+const io = new Server(httpServer, ioOptions);
+
+io.on("connect", (socket) => {
+  console.log("user has been connected");
+  // console.log(socket.id)
+
+  // Message
+  socket.on(SOCKET_EVENTS.NEW_MESSAGE, async (message) => {
+    try {
+      const mesInstanse = new Message(message);
+      const createdMessage = await mesInstanse.save();
+      io.emit(SOCKET_EVENTS.NEW_MESSAGE, createdMessage);
+    } catch (error) {
+      socket.emit(SOCKET_EVENTS.NEW_MESSAGE_ERROR, error.message);
+    }
+  });
+  socket.on('disconnect', () => {
+    console.log('user has been disconnected')
+  })
 });
+
+httpServer.listen(PORT, () => {
+  console.log(`Server has been running at ${PORT}`);
+});
+// addEventListener('click, () => console.log)

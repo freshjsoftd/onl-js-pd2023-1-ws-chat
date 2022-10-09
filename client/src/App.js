@@ -1,13 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { bindActionCreators } from 'redux';
+import { Formik, Form, Field } from 'formik';
 import './App.css';
 import * as chatActionCreators from './actions/actionCreators';
 
 function App () {
   const {messages, isFetching, error} = useSelector(state => state.chat);
   const dispatch = useDispatch();
-  const {createMessageAction, getMessagesAction} = bindActionCreators(
+  const {getMessagesAction, createMessageAction, } = bindActionCreators(
     chatActionCreators,
     dispatch
   )
@@ -15,10 +16,35 @@ function App () {
   useEffect(() => {
     getMessagesAction();
   }, [])
-
+console.log(messages)
   return (
     <>
-      
+      <ol>
+          {messages.map(message => (
+            <li key={message.createdAt}>
+              {message.author} {message.body} {message.createdAt}
+            </li>
+          ))}
+      </ol>
+      {error && <div>ERROR!!!</div>}
+      {isFetching && <div>Loading ...</div>}
+      <Formik
+        initialValues={{author: '', body: ''}}
+        onSubmit={(values, formikBag) => {
+          createMessageAction(values);
+          formikBag.resetForm();
+        }}
+      >
+        {(formik) => (
+          <Form>
+            <label htmlFor='author'>Author</label>
+            <Field name='author'/>
+            <label htmlFor='body'>Body</label>
+            <Field name='body'/>
+            <button type='submit'>Send</button>
+          </Form>
+        )}
+      </Formik>
     </>
   );
 }

@@ -5,7 +5,7 @@ const messageSchema = new Schema(
   {
     author: {
       type: String,
-      match: /^[A-Z,А-Я](\w+\s?){1,10}\w+$/,
+      // match: /^[A-Z,А-Я](\w+\s?){1,10}\w+$/,
     },
     body: {
       type: String,

@@ -2,7 +2,7 @@ const http = require("http");
 const app = require("./app");
 const { Server } = require("socket.io");
 const { Message } = require("./models");
-const { SOCKET_EVENTS } = require('../constant/constants')
+const { SOCKET_EVENTS } = require('../client/src/constant/constants')
 
 const PORT = 5000;
 
@@ -16,6 +16,10 @@ const ioOptions = {
 
 const io = new Server(httpServer, ioOptions);
 
+/* const SOCKET_EVENTS = {
+  NEW_MESSAGE: 'NEW_MESSAGE',
+  NEW_MESSAGE_ERROR: 'NEW_MESSAGE_ERROR'
+} */
 io.on("connect", (socket) => {
   console.log("user has been connected");
   // console.log(socket.id)

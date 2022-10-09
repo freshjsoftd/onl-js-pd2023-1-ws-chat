@@ -8,8 +8,7 @@ const initialState = {
   limit: 20
 };
 
-const messageReducer = (state = initialState, action) => {
-  const { type } = action;
+const messageReducer = (state = initialState, {type, payload}) => {
   switch (type) {
     case ACTION_TYPES.GET_MESSAGES_REQUEST:
     case ACTION_TYPES.CREATE_MESSAGE_REQUEST: {
@@ -20,12 +19,12 @@ const messageReducer = (state = initialState, action) => {
       })
     }
     case ACTION_TYPES.GET_MESSAGES_SUCCESS: {
-      const { payload: messages } = action;
-      const newMassages = [...messages];
-      return {...state, messages: newMassages, isFetching: false};
+      // const { messages } = payload;
+      // const newMassages = [...payload];
+      return {...state, messages: [...payload], isFetching: false};
     }
     case ACTION_TYPES.CREATE_MESSAGE_SUCCESS: {
-      const { payload: newMessage } = action;
+      const {newMessage } = payload;
       const {messages, limit} = state;
       const newMassages = [...messages, newMessage];
 
@@ -36,7 +35,7 @@ const messageReducer = (state = initialState, action) => {
     }
     case ACTION_TYPES.GET_MESSAGES_ERROR:
     case ACTION_TYPES.CREATE_MESSAGE_ERROR: {
-      const { payload } = action;
+      // const { payload } = action;
       // return {...state, error: payload, isFetching: false}
       return produce(state, draftState => {
         draftState.error = payload;

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { io } from 'socket.io-client';
-// import { SOCKET_EVENTS } from '../../../constant/constants';
 import {
   createMessageSuccess,
   createMessageError,

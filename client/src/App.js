@@ -15,7 +15,7 @@ function App () {
 
   useEffect(() => {
     getMessagesAction();
-  }, [])
+  }, [getMessagesAction]);
 console.log(messages)
   return (
     <>

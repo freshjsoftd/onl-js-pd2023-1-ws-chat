@@ -22,7 +22,7 @@ const io = new Server(httpServer, ioOptions);
 } */
 io.on("connect", (socket) => {
   console.log("user has been connected");
-  // console.log(socket.id)
+  console.log(socket.id)
 
   // Message
   socket.on(SOCKET_EVENTS.NEW_MESSAGE, async (message) => {
@@ -38,6 +38,10 @@ io.on("connect", (socket) => {
     console.log('user has been disconnected')
   })
 });
+
+const count = io.engine.clientsCount;
+
+console.log('Number for client coonection is ', count)
 
 httpServer.listen(PORT, () => {
   console.log(`Server has been running at ${PORT}`);
